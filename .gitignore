@@ -1,0 +1,23 @@
+# Dependencias y builds
+node_modules/
+out/
+dist/
+*.log
+.DS_Store
+*.tsbuildinfo
+
+# TUS DATOS: nunca se suben a GitHub
+# (tus oficinas, agentes, conversaciones, memorias, informes)
+offices/
+archives/
+agents/
+models/
+.env
+.env.*
+*.pem
+*.key
+messagerie.json
+/office.json
+/meetings/
+/agents-archive/
+logs/

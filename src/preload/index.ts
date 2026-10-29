@@ -1,0 +1,80 @@
+import { contextBridge, ipcRenderer } from 'electron'
+import type { Api } from '@shared/types'
+
+const sub = (channel: string) => (cb: (p: any) => void) => {
+  const h = (_: unknown, p: any): void => cb(p)
+  ipcRenderer.on(channel, h)
+  return () => ipcRenderer.removeListener(channel, h)
+}
+const inv = (channel: string) => (...args: unknown[]) => ipcRenderer.invoke(channel, ...args)
+
+const api: Api = {
+  listOffices: inv('offices:list'),
+  createOffice: inv('offices:create'),
+  archiveOffice: inv('offices:archive'),
+  getOffice: inv('office:get'),
+  getAlerts: inv('alerts:office'),
+  getAllAlerts: inv('alerts:all'),
+  getAgent: inv('agent:get'),
+  getSession: inv('session:get'),
+  markSeen: inv('session:seen'),
+  send: inv('agent:send'),
+  stop: inv('agent:stop'),
+  resetSession: inv('session:reset'),
+  createAgent: inv('agent:create'),
+  updateAgent: inv('agent:update'),
+  patchAgent: inv('agent:patch'),
+  deleteAgent: inv('agent:delete'),
+  getLayout: inv('layout:get'),
+  saveLayout: inv('layout:save'),
+  listAccess: inv('access:list'),
+  saveAccess: inv('access:save'),
+  removeAccess: inv('access:remove'),
+  openUrl: inv('shell:url'),
+  getActions: inv('actions:get'),
+  saveActions: inv('actions:save'),
+  readMemory: inv('memory:read'),
+  readClaudeMd: inv('claudemd:read'),
+  writeClaudeMd: inv('claudemd:write'),
+  runRoutine: inv('routine:run'),
+  readRoutine: inv('routine:read'),
+  writeRoutine: inv('routine:write'),
+  listReports: inv('reports:list'),
+  readReport: inv('reports:read'),
+  markReportRead: inv('reports:markRead'),
+  listInbox: inv('inbox:list'),
+  readInbox: inv('inbox:read'),
+  markInboxRead: inv('inbox:markRead'),
+  startMeeting: inv('meeting:start'),
+  getMeeting: inv('meeting:get'),
+  listMeetings: inv('meeting:list'),
+  listSkills: inv('skills:list'),
+  pickFolder: inv('dialog:pickFolder'),
+  openPath: inv('shell:open'),
+  findPaths: inv('paths:find'),
+  mcpAuth: inv('mcp:auth'),
+  revealPath: inv('paths:reveal'),
+  openFile: inv('paths:open'),
+  checkClaude: inv('claude:check'),
+  checkVoice: inv('voice:check'),
+  installVoice: inv('voice:install'),
+  askMic: inv('voice:askMic'),
+  onVoiceInstall: sub('voice-install'),
+  speak: inv('voice:speak'),
+  stopSpeaking: inv('voice:stop'),
+  listVoices: inv('voice:voices'),
+  openVoiceSettings: inv('voice:openSettings'),
+  transcribe: inv('voice:transcribe'),
+  saveImage: inv('image:save'),
+  readImage: inv('image:read'),
+  onRunner: sub('runner'),
+  onMeeting: sub('meeting'),
+  onRoutine: sub('routine'),
+  onAlerts: sub('alerts'),
+  listConversations: inv('conv:list'),
+  getThread: inv('conv:thread'),
+  markConversationRead: inv('conv:read'),
+  setConversationUnread: inv('conv:unread')
+}
+
+contextBridge.exposeInMainWorld('api', api)

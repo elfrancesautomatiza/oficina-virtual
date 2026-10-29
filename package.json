@@ -1,0 +1,53 @@
+{
+  "name": "oficina-virtual",
+  "version": "0.1.0",
+  "description": "Oficina virtual de agentes Claude Code para Mac: cada agente tiene su escritorio, su conversación, su memoria, sus rutinas y sus accesos.",
+  "main": "./out/main/index.js",
+  "author": "El Francés Automatiza",
+  "private": true,
+  "scripts": {
+    "dev": "electron-vite dev",
+    "start": "electron-vite build && (nohup node_modules/.bin/electron . > /dev/null 2>&1 &) && echo \"Oficina Virtual lanzada.\"",
+    "build": "electron-vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "node --import tsx --test tests/*.test.mts",
+    "routine": "node scripts/run-routine.mjs",
+    "package": "electron-vite build && electron-builder --mac --dir && echo \"App lista: dist/mac-arm64/Oficina Virtual.app (o dist/mac/)\"",
+    "start:fg": "electron-vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "0.185.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.0.0",
+    "electron-vite": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "0.185.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.0",
+    "vite": "^7.0.0"
+  },
+  "build": {
+    "appId": "com.oficina-virtual.app",
+    "productName": "Oficina Virtual",
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "identity": null,
+      "target": [
+        "dir"
+      ],
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Oficina Virtual usa el micrófono para transcribir tus mensajes de voz a los agentes, en local."
+      }
+    }
+  },
+  "license": "MIT"
+}
